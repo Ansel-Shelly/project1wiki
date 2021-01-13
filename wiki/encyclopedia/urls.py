@@ -4,9 +4,7 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("wiki/<str:site>", views.site, name="site")
-    #path("django", views.django, name="Django"),
-    #path("git", views.git, name="Git"),
-    #path("html", views.html, name="HTML"),
-    #path("python", views.python, name="Python")
+    path("wiki/<str:site>", views.site, name="site"),
+    path("search", views.search, name="search"),
+    path("create", views.create, name="create")
 ]

@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 from . import util
 
@@ -18,3 +20,38 @@ def site(request, site):
         "site": site,  
         "content": content
     })
+
+def search(request):
+    query = request.POST["q"]
+    entryList = util.list_entries()
+
+    if query in entryList:
+        return HttpResponseRedirect(reverse("site", kwargs={"site": query}))
+    
+    else:
+        newList = []
+        for entry in entryList:
+            if query.lower() in entry.lower():
+                newList.append(entry)
+                return HttpResponseRedirect(reverse("site", kwargs={"site": query}))
+            
+        return render(request, "encyclopedia/results.html", {
+                    "newList": newList
+                })
+    
+
+def create(request):
+    if request.method == "GET":
+        return render(request, "encyclopedia/create.html")
+
+    title = request.POST["title"]
+    content = request.POST["pgContent"]
+
+    if util.get_entry(title):
+        return render(request,"encyclopedia/create.html", {
+            "error": "An entry with this title already exist, please try another entry"
+        })
+    
+    util.save_entry(title, content)
+
+    return HttpResponseRedirect(reverse("site", kwargs={"site": title}))
