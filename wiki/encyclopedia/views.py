@@ -55,3 +55,17 @@ def create(request):
     util.save_entry(title, content)
 
     return HttpResponseRedirect(reverse("site", kwargs={"site": title}))
+
+def edit(request, site):
+    value = util.get_entry(site)
+
+    if request.method == "GET":
+        return render(request, "encyclopedia/edit.html", {
+            "site": site,
+            "value": value 
+        })
+
+    new_content = request.POST["new_content"]
+    util.save_entry(site,new_content)
+
+    return HttpResponseRedirect(reverse("site", kwargs={"site": site}))
