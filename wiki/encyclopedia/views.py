@@ -5,6 +5,7 @@ from django.urls import reverse
 from . import util
 
 import markdown2
+import random
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -69,3 +70,9 @@ def edit(request, site):
     util.save_entry(site,new_content)
 
     return HttpResponseRedirect(reverse("site", kwargs={"site": site}))
+
+def rand(request):
+    site = random.choice(util.list_entries())
+
+    return HttpResponseRedirect(reverse("site", kwargs={"site": site}))
+
