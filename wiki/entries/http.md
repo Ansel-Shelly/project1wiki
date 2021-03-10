@@ -1,1 +1,0 @@
-Hypertext transfer protocol.
